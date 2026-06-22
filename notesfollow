@@ -1,0 +1,57 @@
+step:1 
+       npm init -y 
+       to install package.json
+
+step:2 
+       npm i express
+       to install  dependencies of express package and import node modules
+
+step:3 
+      go to backend folder and create app.js
+      if u want to use import export statement instead of require make changes on. 
+      go to the pacakage.json chnage the type "commonjs" to "module".
+
+step:4
+      import express in app.js then assian to a variable and export it.
+
+step:5
+      create a server.js file for app.js and import app.js onit.
+      to create localhost server create app.listen.
+
+step:6
+       go to package.json => scrpits remove test add file path =>"start":"node Backend/server.js"    
+       
+       then type npm start => server running
+
+step:7
+
+     to refresh when u make changes on code automaticlly the server install "nodemon package"
+  
+  cmd:npm i nodemon -D
+
+     that dependencies added on pacakge.json 
+     
+    and u will replace node into nodemon on "start":"nodemon Backend/server.js"  
+
+step:8(dotenv)
+   to maintain a port on saprate folder for it. so create a confiq file and folder
+ 
+ cmd:npm i dotenv    
+    import the dotenv and configure that
+    dotenv.config({path:"Backend/config/config.env"});
+
+    in future we can manage api keys , web tokens
+
+STEP:9(router)
+     TO set up the route the api method to test on formal get method,using http requests 
+
+     create a 2 folder:(split the api method)
+
+      mvc(model view controller)
+       1.controller=>controlproduct for functions(req,res);
+       2.router=>router.js for routing
+         import router from express  ( const router = express.Router();)  
+         and change (app to router): then export router and import in app.js (in the name of product)
+
+STEP:10
+     after import router as product in app.js to insert into a app.use as path of directory and fet the data(app.use('/api/v1',product))
