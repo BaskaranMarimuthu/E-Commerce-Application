@@ -1,4 +1,4 @@
-step:1 
+step:1 -------[day1] ---------------------------------------------------------------------------
        npm init -y 
        to install package.json
 
@@ -55,3 +55,59 @@ STEP:9(router)
 
 STEP:10
      after import router as product in app.js to insert into a app.use as path of directory and fet the data(app.use('/api/v1',product))
+
+
+---------------------[DAY 2 (VEDIO 7)]----------------------------------------------------------------------------------------------     
+
+mongodb installaion crud operation update/delete/add/remove product full database
+
+Step:1 ------DATABASE CONNECTION
+   cmd: npm i mongoose(mongpdb database package installation)
+   import the mongoose packeges on db.js 
+   then go to config folder create db.
+   to connect databaes into a server
+    mongoose
+      .connect(process.env.MNG_URL)  and export the function to server.js file
+
+ 
+     connect the database before server start    
+
+
+STEP:2 ---------SCHEMA CREATION FOR PRODUCTS
+    create a productmode
+      for to maintain crud operation schema for products  using mongoose
+      In a MongoDB e-commerce app, the Product schema/model defines the structure for every product document in your database — it's the blueprint for what data each product stores and how it's validated before saving.     
+STEP:3
+     Convert schema  into a model and export that   
+    export default  mongoose.model("product",productSchema);
+       
+step:4
+     create post method api in controlproduct.js as addproduct
+     
+
+     import into a router.js and convert it 
+
+     (router.get("/products", getOneProduct);=====> router.route("/products").get( getAllProducts).post(addProducts);) 
+    
+    so we got chainig for get/post methods to handle in a single line
+ 
+ 
+ STEP:5      ---------POST REQUEST------MIDDLEWARE CREATION
+     Send post request which means create a data but in console it gives undefined as output because it doesn't know which format output
+     so we have to tell that server conver into a json format.
+
+    IN APP.js
+      add   
+       app.use(express.json());
+
+       add a middleware ==> it is used to recive the users data as a json format
+
+       now the output came because of in post request i write a console.log(req.body);
+       o/p
+       { name: 'pen', price: 100, description: 'used to write' }
+
+
+step:6 
+     import Product from productModel.js in controlproduct.json
+       and pass the user created data into req boday in async/await post req method.
+       then display the response on postman output window
