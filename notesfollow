@@ -73,7 +73,7 @@ Step:1 ------DATABASE CONNECTION
      connect the database before server start    
 
 
-STEP:2 ---------SCHEMA CREATION FOR PRODUCTS
+STEP:2 ---------SCHEMA CREATION FOR PRODUCTS---------
     create a productmode
       for to maintain crud operation schema for products  using mongoose
       In a MongoDB e-commerce app, the Product schema/model defines the structure for every product document in your database — it's the blueprint for what data each product stores and how it's validated before saving.     
@@ -107,7 +107,63 @@ step:4
        { name: 'pen', price: 100, description: 'used to write' }
 
 
-step:6 
+step:6 ----create product-----
      import Product from productModel.js in controlproduct.json
-       and pass the user created data into req boday in async/await post req method.
+       and pass the user created data into req body in async/await post req method.
        then display the response on postman output window
+setp:7-----get all product-----get single product--------------
+    define a function with async/await method and pass the Product(all data) with find method (to retrive the all document)
+     display the product assigned (Product.find())    
+          ---------------------
+          get a id first by using req.params.id and call the method of Product.findById().
+          check the id weather is in Product or not then fetch the data.
+
+ STEP:8-----------------UPDATE PRODUCT------ >
+           { new:true,runValidators:true} ======>options object 
+        get using req.params.id and use a method to update is [Product.findByIdAndUpdate(id,req.body,{ new:true,runValidators:true} );]      
+        here, findByIdAndUpdate to update the data and make sure that pass the req.body(what we have to update inside the req.body)
+        make sure new:true for new data store in updation and to validation for the updated data using runValidators. 
+
+STEP:9---------------delete--------------------------------
+
+         get by id and use findByIdAndDelete to delete it an the same method as well as updated
+
+
+ --------------------------------[Day part -9]---------------------------------------------------------------------------------------------------------------------------
+                           topic:error handling and middleware 
+
+   step1:
+      create handlerr folder create errorclass.js findByIdAndDelete  
+      HandleError is a custom error class that extends JavaScript's Error object. 
+      We use it to create application-specific errors with custom status codes and messages. 
+      The super(message) sets the error message, statuscode stores the HTTP status, and Error.captureStackTrace() gives a cleaner stack trace for debugging. 
+      In Express applications, it helps us centralize error handling using a global error middleware." 
+
+  step:2
+       create middleware folder    
+       n Express, middleware with 4 parameters (err, req, res, next) is automatically treated as an error handler. 
+       Express calls this function whenever you do next(err) somewhere in your app, instead of calling regular (req, res, next) middleware.   
+
+ step:3 
+     import that file middleware on app.js . put the errorhandling middleware always after the app.routes
+
+     import that handle error on controlproduct respectevely and usre it.  
+
+ --------------------------------[search funtionality]------------------------------------------
+
+ step:1
+                                  
+       insert the dummy data into a ecom =>product
+       create api handeler and write class for apihandle with constructor with search function.
+       pass the 2 paramerter for the class constructor query(mongodb query)and query string(req.query by user key value).
+       write the mongo query for it and destructur that and insert into a this.query and return the output.
+       export the calss and import into a controlproduct.js.
+       create obj for a class. assain the await 
+
+[claude]---------
+       In the controller, I call Product.find() to start a query, and pass it into a helper class called ApiHandler, along with the query params from the URL — like ?key=phone.
+Inside ApiHandler, the search() method checks if there's a key in the query string. If yes, it builds a filter to search the name field using regex, case-insensitive — so it matches partial text too. If there's no key, it just returns everything, no filter.
+Then back in the controller, I await the final query to actually get the data from MongoDB, and send it back as a response.
+So basically — it's a clean, reusable way to add search functionality without writing filter logic directly inside the controller."
+
+--------------------------------------
