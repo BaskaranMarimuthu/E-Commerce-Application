@@ -1,10 +1,11 @@
 import Product from "../models/productmodels.js";
 
-import handleError from "../handlerr/errorclass.js";
+import handleError from "../handler/errorclass.js";
 import ApiHandler from "../api/apiquery.js";
 
 //Create products
 export const addProducts = async (req, res) => {
+  req.body.user = req.user.id;
   // console.log(req.body);
   const product = await Product.create(req.body);
   res.status(201).json({
@@ -13,16 +14,38 @@ export const addProducts = async (req, res) => {
   });
 };
 //get all products
-export const getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res, next) => {
   //const products= await Product.find();
   //console.log(req.query); req.query display get the key value pair
 
   //obj for api
   const objApi = new ApiHandler(Product.find(), req.query).search().filter();
 
+  const filteredQuery = objApi.query.clone(); // query clone of search and filter
+  const productCount = await filteredQuery.countDocuments(); // number of matching documents
+
+  const productPerPage = 4;
+  let page = Number(req.query.page) || 1; // request query page, default to 1
+  if (page < 1) page = 1;
+
+  const totalPages = Math.ceil(productCount / productPerPage);
+  if (totalPages > 0 && page > totalPages) {
+    return next(new handleError("page doesn't exist", 404));
+  }
+
+  // apply pagination to the query (instance method on objApi)
+  objApi.pagination(productPerPage);
+
   const products = await objApi.query;
 
-  return res.status(200).json({ success: true, products });
+  return res.status(200).json({
+    success: true,
+    products,
+    productCount,
+    productPerPage,
+    totalPages,
+    currentPage: page,
+  });
 };
 
 //get single product by id

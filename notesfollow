@@ -166,4 +166,17 @@ Inside ApiHandler, the search() method checks if there's a key in the query stri
 Then back in the controller, I await the final query to actually get the data from MongoDB, and send it back as a response.
 So basically — it's a clean, reusable way to add search functionality without writing filter logic directly inside the controller."
 
---------------------------------------
+--------------------------------------[jwt v13]------------------------------------------
+
+step:1
+    jwt json web token
+    A JSON Web Token (JWT) is a compact, URL-safe token format used to securely transmit information between a client (like a browser or mobile app) and a server.
+
+    It is widely used for authentication (verifying who the user is) and authorization (checking what the user can access).
+
+token:A token is a digital key used for authentication and authorization, allowing secure and stateless communication between client and server.
+--------------------------------------------[vedio 15]-------------------------------------
+                                   token cookies verifying
+
+ step:1 create verifyuser route and import in a routeproduct.
+        check before get requset so insert before that .it will check weather the Token is verified of not.                             

@@ -4,9 +4,8 @@ class ApiHandler {
     this.queryString = queryString;
   }
   search() {
-    const keyword = this.queryString.key
-      ? {
-          name: { $regex: this.queryString.key, $options: "i" },
+    const keyword = this.queryString.key? {
+      name: { $regex: this.queryString.key, $options: "i" },
         }
       : {};
     this.query = this.query.find({ ...keyword });
@@ -20,6 +19,13 @@ class ApiHandler {
     deleteKey.forEach((element) => delete copyQuery[element]);
     this.query = this.query.find(copyQuery);
     return this;
+  }
+  pagination(productPerPage){
+    const currentPage = Number(this.queryString.page)||1;
+    const skip = productPerPage*(currentPage-1);
+    this.query = this.query.limit(productPerPage).skip(skip);
+    return this;
+
   }
 }
 export default ApiHandler;

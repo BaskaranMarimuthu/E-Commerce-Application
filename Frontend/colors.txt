@@ -1,0 +1,162 @@
+# Premium ecommerce design system — Tailwind reference
+
+Palette: charcoal (`ink`) + warm ivory (`ivory`) + antique gold (`gold`), with muted
+`success`/`error` for feedback states. Drop `tailwind.config.js` into your project root
+and use the classes below directly.
+
+---
+
+## Navbar
+
+```html
+<nav class="bg-ink-900 text-ivory-50 px-6 py-4 flex items-center justify-between">
+  <span class="text-lg font-medium tracking-wide">MAISON</span>
+  <div class="flex gap-6 text-sm text-ivory-300">
+    <a href="#" class="hover:text-gold-400 transition-colors duration-200">Women</a>
+    <a href="#" class="hover:text-gold-400 transition-colors duration-200">Men</a>
+    <a href="#" class="hover:text-gold-400 transition-colors duration-200">Sale</a>
+  </div>
+  <div class="flex gap-4 text-ivory-50">
+    <button class="hover:text-gold-400 transition-colors duration-200">Search</button>
+    <button class="hover:text-gold-400 transition-colors duration-200">Cart</button>
+  </div>
+</nav>
+```
+
+## Page background & cards
+
+```html
+<body class="bg-ivory-200">
+<div class="bg-ivory-50 border border-ivory-400 rounded-lg p-4">...</div>
+```
+
+## Buttons
+
+**Primary (Add to cart, Checkout, Place order)**
+```html
+<button class="bg-ink-900 hover:bg-ink-800 active:bg-ink-950 active:scale-[0.97]
+  text-ivory-50 px-7 py-3 rounded-sm text-sm tracking-wide
+  transition-all duration-200">
+  Add to cart
+</button>
+```
+
+**Secondary (Save, Cancel, Filter)**
+```html
+<button class="border border-ink-900 text-ink-900
+  hover:border-gold-500 hover:text-gold-600
+  active:bg-gold-100 active:scale-[0.97]
+  px-7 py-3 rounded-sm text-sm tracking-wide
+  transition-all duration-200">
+  Save for later
+</button>
+```
+
+**Ghost / tertiary (links, nav-level actions)**
+```html
+<button class="text-ink-600 hover:text-gold-500 transition-colors duration-200">
+  View details
+</button>
+```
+
+**Disabled state** (use sparingly — prefer showing why an action is unavailable)
+```html
+<button class="bg-ivory-400 text-ivory-700 cursor-not-allowed px-7 py-3 rounded-sm">
+  Out of stock
+</button>
+```
+
+## Sale / status badges
+
+```html
+<span class="bg-gold-500 text-ink-900 text-xs px-2 py-1 rounded-sm tracking-wide">SALE</span>
+<span class="bg-success-100 text-success-700 text-xs px-2 py-1 rounded-sm">In stock</span>
+<span class="bg-error-100 text-error-700 text-xs px-2 py-1 rounded-sm">Sold out</span>
+```
+
+## Product card
+
+```html
+<div class="bg-ivory-50 border border-ivory-400 rounded-lg overflow-hidden
+  hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+  <img class="hover:scale-105 transition-transform duration-300" src="..." />
+  <div class="p-3">
+    <p class="text-ink-900 text-sm font-medium">Wool overcoat</p>
+    <p class="text-gold-600 text-sm">$420</p>
+  </div>
+</div>
+```
+
+---
+
+## Login page
+
+```html
+<div class="min-h-screen bg-ivory-200 flex items-center justify-center">
+  <div class="bg-ivory-50 border border-ivory-400 rounded-lg p-8 w-96">
+    <h1 class="text-ink-900 text-xl font-medium mb-1">Welcome back</h1>
+    <p class="text-ink-500 text-sm mb-6">Log in to continue shopping</p>
+
+    <label class="text-ink-700 text-xs uppercase tracking-wide">Email</label>
+    <input type="email" class="w-full bg-ivory-100 border border-ivory-400
+      focus:border-gold-500 focus:ring-2 focus:ring-gold-100 outline-none
+      rounded-sm px-3 py-2 mt-1 mb-4 text-ink-900 transition-all duration-200" />
+
+    <label class="text-ink-700 text-xs uppercase tracking-wide">Password</label>
+    <input type="password" class="w-full bg-ivory-100 border border-ivory-400
+      focus:border-gold-500 focus:ring-2 focus:ring-gold-100 outline-none
+      rounded-sm px-3 py-2 mt-1 mb-6 text-ink-900 transition-all duration-200" />
+
+    <button class="w-full bg-ink-900 hover:bg-ink-800 active:bg-ink-950
+      text-ivory-50 py-3 rounded-sm text-sm transition-all duration-200">
+      Log in
+    </button>
+
+    <p class="text-ink-500 text-xs text-center mt-4">
+      No account?
+      <a href="#" class="text-gold-600 hover:text-gold-700">Register here</a>
+    </p>
+  </div>
+</div>
+```
+
+## Register page
+
+Same shell as login, plus a confirm-password field and inline validation:
+
+```html
+<!-- error state on a field -->
+<input class="w-full bg-ivory-100 border border-error-500
+  focus:ring-2 focus:ring-error-100 outline-none
+  rounded-sm px-3 py-2 mt-1 text-ink-900" />
+<p class="text-error-500 text-xs mt-1">Passwords don't match</p>
+
+<!-- success state on a field -->
+<input class="w-full bg-ivory-100 border border-success-500
+  focus:ring-2 focus:ring-success-100 outline-none
+  rounded-sm px-3 py-2 mt-1 text-ink-900" />
+```
+
+---
+
+## Footer
+
+```html
+<footer class="bg-ink-900 text-ivory-400 px-6 py-5 flex justify-between text-xs">
+  <span>© 2026 Maison</span>
+  <span class="text-gold-500">Free shipping over $150</span>
+</footer>
+```
+
+---
+
+## Quick rules to keep it premium
+
+1. Gold only on things that matter: price, primary CTA hover/focus ring, sale badge.
+   If gold shows up on every icon, it stops reading as premium.
+2. One filled (`bg-ink-900`) button per view. Every other action is outline or ghost.
+3. All transitions: `duration-200` for color/border, faster (`duration-100` /
+   `scale-[0.97]`) for press feedback, `duration-300` for layout movement
+   (card lift, image zoom).
+4. Error/success colors are muted (`error-500` = `#C1443A`, not Tailwind's default
+   bright red) so they don't clash with the rest of the palette.

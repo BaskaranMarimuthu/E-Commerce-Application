@@ -1,0 +1,8 @@
+install tailwind:
+           npm install tailwindcss @tailwindcss/vite
+
+vite.config.js
+       import : import tailwindcss from '@tailwindcss/vite'    
+       add inside plugin :tailwindcss()       
+
+       npm i react-router-dom lucide-react react-hot-toast

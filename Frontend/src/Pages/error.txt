@@ -1,0 +1,63 @@
+ <nav className="sticky top-0 z-50 bg-[#1A1A1A]  text-white shadow-xl w-full">
+      <div className="max-w-6xl flex h-16 align-center px-20 justify-between">
+        <Link
+          to="/"
+          className="flex items-center gap-2 text-2xl font-light text-yellow-300"
+        >
+          <ShoppingBag />
+          <span>shopping hub</span>
+        </Link>
+        <div className="hidden md:flex items-center gap-10 font-semibold">
+          <Link
+            to="/"
+            className="hover:text-yellow-100 transition duration-200"
+          >
+            Home
+          </Link>
+          <Link
+            to="/about"
+            className="hover:text-yellow-100 transition duration-200"
+          >
+            About
+          </Link>
+          <Link
+            to="/register"
+            className="hover:text-yellow-100 transition duration-200"
+          >
+            Register
+          </Link>
+          <Link
+            to="/contact"
+            className="hover:text-yellow-100 transition duration-200"
+          >
+            Contact Us
+          </Link>
+        </div>
+        <div className=" hidden sm:flex items-center border-slate-200 overflow-hidden gap-6 ">
+          <form>
+            <input
+              className="bg-white text-yellow-900 rounded focus:outline-none px-5 py-1  mx-2 w-40 text-sm"
+              placeholder="Search here.."
+            />
+            <button className="text-blue-400 hover:text-yellow-200  rounded transition 300 ">
+              <Search size={18} />
+            </button>
+          </form>
+          <Link className="relative inline-block ">
+            <ShoppingCart />
+            <span className="absolute -top-2 -right-0.5 flex items-center justify-center  px-1 text-xs font-semibold leading-none text-white bg-blue-500 rounded">
+              4
+            </span>
+          </Link>
+
+           {/* register */}
+          {!isAuthendicated && (<Link className="sm:flex items-center gap-2 bg-yellow-300 px-3 py-1 rounded hover:bg-yellow-400 text-black transition">
+            <User size={18} />
+            Register
+          </Link>)}
+          <button onClick={()=>setOpen(!open)} className="md:hidden">
+             {open?<X/>:<MenuIcon/>}
+          </button>
+        </div>
+      </div>
+    </nav>
