@@ -65,4 +65,4 @@ userModel.methods.createPasswordResetToken = function () {
   this.resetPasswordExpire = Date.now() +30*60*1000;
   return resetToken;
 }
-export default mongoose.model("UserModel", userModel);
+export default mongoose.model("User", userModel);

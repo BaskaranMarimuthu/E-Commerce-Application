@@ -1,4 +1,4 @@
-import userModel from "../models/userModel.js";
+import User from "../models/userModel.js";
 import HandleError from "../handler/errorclass.js";
 import { tokenGernerate } from "../handler/jwtToken.js";
 import { sendEmail } from "../handler/sendMail.js";
@@ -15,7 +15,7 @@ export const registerUser = async (req, res, next) => {
     );
   }
 
-  const userDetails = await userModel.create({
+  const userDetails = await User.create({
     name,
     password,
     email,
@@ -30,15 +30,25 @@ export const registerUser = async (req, res, next) => {
 // lohin user
 export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
+  
+
   if (!email || !password) {
     return next(new HandleError(`please enter email and password`, 404));
   }
-  const login = await userModel.findOne({ email }).select("+password");
+
+  const login = await User.findOne({ email }).select("+password");
+  
+
   if (!login) {
+    
     return next(new HandleError("Invalid Email or Password", 401));
   }
+
   const isValidPassword = await login.checkPassword(password);
+
+
   if (!isValidPassword) {
+    
     return next(new HandleError("Invalid Email or Password", 401));
   }
 
@@ -58,7 +68,7 @@ export const logout = async (req, res, next) => {
 //reset password
 export const resetPassword = async (req, res, next) => {
   const { email } = req.body;
-  const user = await userModel.findOne({ email });
+  const user = await User.findOne({ email });
   if (!user) {
     return next(new HandleError("user does not exist", 400));
   }
@@ -101,7 +111,7 @@ export const resetPW = async (req, res, next) => {
     .update(req.params.token)
     .digest("hex");
   console.log(resetPasswordToken);
-  const user = await userModel.findOne({
+  const user = await User.findOne({
     resetPasswordToken,
     resetPasswordExpire: {
       $gt: Date.now(),
@@ -124,7 +134,7 @@ export const resetPW = async (req, res, next) => {
 //user profile check
 
 export const profileCheck = async (req, res, next) => {
-  const user = await userModel.findById(req.user.id);
+  const user = await User.findById(req.user.id);
   res.status(200).json({
     success: true,
     user,
@@ -135,7 +145,7 @@ export const profileCheck = async (req, res, next) => {
 export const updatePassword = async (req, res, next) => {
   const { oldPassword, newPassword, confrimPassword } = req.body;
 
-  const user = await userModel.findById(req.user.id).select("+password");
+  const user = await User.findById(req.user.id).select("+password");
   const isCorrect = await user.checkPassword(oldPassword);
   if (!isCorrect) {
     return next(new HandleError("incorrect assword", 400));
@@ -153,7 +163,7 @@ export const updatePassword = async (req, res, next) => {
 export const updateProfile = async (req, res, next) => {
   const { name, email } = req.body;
   const updateDetails = { name, email };
-  const user = await userModel.findByIdAndUpdate(req.user.id, updateDetails, {
+  const user = await User.findByIdAndUpdate(req.user.id, updateDetails, {
     new: true,
     runValidators: true,
   });
@@ -166,7 +176,7 @@ export const updateProfile = async (req, res, next) => {
 
 //getuser
 export const getUserAdmin = async (req, res) => {
-  const users = await userModel.find();
+  const users = await User.find();
   res.status(200).json({
     success: true,
     users,
@@ -177,7 +187,7 @@ export const getUserAdmin = async (req, res) => {
 
 export const getSingleUser = async (req, res, next) => {
   const id = req.params.id;
-  const users = await userModel.findById(id);
+  const users = await User.findById(id);
   if (!users) {
     return next(new HandleError("user id doesn't exist", 400));
   }
@@ -191,7 +201,7 @@ export const userRoleUpdate = async(req, res, next)=>{
   const {role}=req.body;
   const id=req.params.id;
   const Role={role};
-  const user = await userModel.findByIdAndUpdate(id, Role, {new:true});
+  const user = await User.findByIdAndUpdate(id, Role, {new:true});
   if(!user){
     return next(new HandleError("user doesn't exist", 400));
   }
@@ -205,7 +215,7 @@ export const userRoleUpdate = async(req, res, next)=>{
 
 export const deleteUser = async(req, res, next)=>{
   const id=req.params.id;
-   const users = await userModel.findById(id);
+   const users = await User.findById(id);
   if (!users) {
     return next(new HandleError("user id doesn't exist", 400));
   }
