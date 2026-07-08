@@ -11,23 +11,25 @@ import toast from "react-hot-toast";
 
 const Home = () => {
   const { products, productCount, loading, error } = useSelector(
-    (state) => state.product
+    (state) => state.product,
   ); // imported from productslice
 
   const dispatch = useDispatch();
 
-  useEffect(()=>{
-    dispatch(getProduct())
-  },[dispatch]);
-  
-  useEffect(()=>{
-    if(error){
+  useEffect(() => {
+    dispatch(getProduct({keyword:""}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (error) {
       toast.error(error.message);
-  dispatch(removeErrors());
+      dispatch(removeErrors());
     }
-  
-  },[dispatch,error])
-  return (loading ? <LoadProduct/> :(
+  }, [dispatch, error]);
+
+  return loading ? (
+    <LoadProduct />
+  ) : (
     <>
       <Title title="Home | E-commerce" />
       <Navbar />
@@ -37,15 +39,13 @@ const Home = () => {
           Latest collections...
         </h2>
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {products.map((item, index) => (
-            <Products key={index} items={item} />
+          {products.map((item) => (
+            <Products key={item._id} items={item} />
           ))}
         </div>
       </div>
       <Footer />
     </>
-  )
-    
   );
 };
 

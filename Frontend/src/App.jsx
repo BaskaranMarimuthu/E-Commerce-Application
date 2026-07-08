@@ -5,12 +5,14 @@ import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import Register from "./Pages/Register";
 import Product from "./Pages/productDetails";
+import ProductsPage from "./Pages/ProductsPage";
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products/:id" element={<Product />} />
+        <Route path="/Products/:id" element={<Product />} />
+        <Route path="/Products" element={<ProductsPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>

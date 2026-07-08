@@ -15,7 +15,8 @@ const router = express.Router();
 
 //without login
 router.get("/products", getAllProducts);
-router.get("/products/:id", getOneProduct);
+
+router.get("/product/:id", getOneProduct);
 //review
 router.route("/review").put(verifyUser, createReviewProduct);
 

@@ -24,7 +24,7 @@ export const getAllProducts = async (req, res, next) => {
   const filteredQuery = objApi.query.clone(); // query clone of search and filter
   const productCount = await filteredQuery.countDocuments(); // number of matching documents
 
-  const productPerPage = 4;
+  const productPerPage = 6;
   let page = Number(req.query.page) || 1; // request query page, default to 1
   if (page < 1) page = 1;
 
@@ -50,16 +50,17 @@ export const getAllProducts = async (req, res, next) => {
 
 //get single product by id
 export const getOneProduct = async (req, res, next) => {
-  // console.log(req.params.id);
-  const id = req.params.id;
-  const product = await Product.findById(id);
-  if (product) {
-    return res
-      .status(200)
-      .json({ success: true, msg: "your app is running for single product" });
-  }
-  // res.status(500).json({ success:false,msg:" product not found"  });
-  return next(new handleError("product id not found", 404));
+
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+        return next(new HandleError("Product not found", 404));
+    }
+
+    res.status(200).json({
+        success: true,
+        product
+    });
 };
 
 //update product
@@ -118,6 +119,7 @@ export const createReviewProduct = async (req, res, next) => {
     product.reviews.push({
       user: req.user._id,
       name: req.user.name,
+      avatar: req.user.avatar.url,
       rating: Number(rating),
       comment,
     });
