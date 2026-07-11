@@ -95,10 +95,11 @@ const Pagination = ({
           </button>
         </div>
 
-        <p className="text-sm text-slate-400 whitespace-nowrap">
+         <p className="text-sm text-slate-400 whitespace-nowrap">
           Page {currentPage} of {totalPages}
         </p>
       </div>
+     
     </div>
   );
 };

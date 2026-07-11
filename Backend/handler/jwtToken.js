@@ -9,7 +9,7 @@ export const tokenGernerate = (userDetails, statuscode, res) => {
   };
   res.status(statuscode).cookie("token", token, options).json({
     success: true,
-    userDetails,
+   user: userDetails,
     token,
   });
 };

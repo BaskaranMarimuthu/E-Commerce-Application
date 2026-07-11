@@ -8,39 +8,52 @@ import LoadProduct from "../components/LoadProduct.jsx";
 import toast from "react-hot-toast";
 import Products from "../components/Products.jsx";
 import Pagenation from "../components/Pagenation.jsx";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 const ProductsPage = () => {
-  const { products, productCount, loading, error,productPerPage } = useSelector(
-    (state) => state.product,
-  ); // imported from productslice
+  const { products, productCount, loading, error, productPerPage } =
+    useSelector((state) => state.product); // imported from productslice
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [searchParams]=useSearchParams();
-  const keyword = searchParams.get("keyword") ||"";
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get("keyword") || "";
+  const category = searchParams.get("category") || "";
 
-  const pageFromURL = parseInt(searchParams.get("page"),10)||1;
+  const pageFromURL = parseInt(searchParams.get("page"), 10) || 1;
 
   const [currentPage, setCurrentPage] = useState(pageFromURL);
   const totalPages = Math.ceil(productCount / (productPerPage || 8));
 
   const handleChangePage = (pageNumber) => {
-    if(pageNumber !== currentPage){
+    if (pageNumber !== currentPage) {
       setCurrentPage(pageNumber);
       const newSearchParams = new URLSearchParams(location.search);
-      if(pageNumber === 1){
+      if (pageNumber === 1) {
         newSearchParams.delete("page");
-      }else{
+      } else {
         newSearchParams.set("page", pageNumber);
       }
-      Navigate(`?${newSearchParams.toString()}`);
+      navigate(`?${newSearchParams.toString()}`);
     }
   };
 
+  const handleCategory = (cat) => {
+    console.log(cat);
+    const newSearchParams = new URLSearchParams(location.search);
+    newSearchParams.delete("page");
+    if (cat == "All") {
+      newSearchParams.delete("category");
+    } else {
+      newSearchParams.set("category", cat);
+    }
+    navigate(`?${newSearchParams.toString()}`);
+  };
+
   useEffect(() => {
-    dispatch(getProduct({keyword, page:currentPage}));
-  }, [dispatch, keyword, currentPage]);
+    dispatch(getProduct({ keyword, page: currentPage, category }));
+  }, [dispatch, keyword, currentPage, category]);
 
   useEffect(() => {
     if (error) {
@@ -69,16 +82,21 @@ const ProductsPage = () => {
 
                 <ul className="space-y-3">
                   {[
-                    "Electronics",
-                    "Groceries",
+                    "All",
                     "Fashion",
-                    "Furniture",
+                    "Electronics",
+                    "Accessories",
+                    "Home and Kitchen",
                     "Footwear",
+                    "Beauty and Personal Care",
+                    "Sports and Fitness",
+                    "Toys and Games",
                   ].map((cat) => (
                     <li key={cat}>
                       <button
+                        onClick={() => handleCategory(cat)}
                         className="w-full text-left px-4 py-3 rounded-xl transition-all duration-300
-                  hover:bg-amber-400 hover:text-white hover:shadow-md
+                  hover:bg-mauve-700  hover:text-white hover:shadow-md
                   border border-gray-200 font-medium"
                       >
                         {cat}
@@ -125,8 +143,6 @@ const ProductsPage = () => {
                 </div>
               ) : (
                 <div className="bg-white rounded-2xl shadow-lg py-24 text-center flex flex-col justify-center items-center">
-                 <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f622.png"  alt="😢" width="32" height="32"/>
-
                   <h2 className="text-2xl font-bold text-gray-700">
                     No Products Found
                   </h2>
@@ -140,7 +156,11 @@ const ProductsPage = () => {
               {/* Pagination */}
 
               <div className="mt-12 flex justify-center">
-                <Pagenation currentPage={currentPage} totalPages={totalPages} onPageChange={handleChangePage}/>
+                <Pagenation
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handleChangePage}
+                />
               </div>
             </section>
           </div>

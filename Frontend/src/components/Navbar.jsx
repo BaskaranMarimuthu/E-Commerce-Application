@@ -16,11 +16,13 @@ import {
   XIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const isAuthendicated = false;
+  const { isAuthenticated } = useSelector((state) => state.user);
+  console.log(isAuthenticated);
   const navigate = useNavigate();
 
   const hanldeSearch = (e) => {
@@ -38,10 +40,10 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 h-24 flex items-center justify-between">
         <Link
           to="/"
-          className="flex items-center gap-3 font-extralight text-4xl text-yellow-100"
+          className="flex items-center gap-3 font-extralight text-4xl text-yellow-300"
         >
           <ShoppingBagIcon size={40} />
-          <span>Shopping Hub</span>
+          <span className="font-semibold">NammaKart</span>
         </Link>
 
         {/* links */}
@@ -104,9 +106,10 @@ const Navbar = () => {
           </Link>
 
           {/* register */}
-          {!isAuthendicated && (
+
+          {!isAuthenticated && (
             <Link
-              to="/login"
+              to="/register"
               className="hidden sm:flex items-center text-black gap-2 bg-amber-50 hover:bg-blue-300 px-3 ml-3   rounded"
             >
               <User2Icon size={18} />

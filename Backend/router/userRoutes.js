@@ -17,7 +17,7 @@ import { roleBasedAccess, verifyUser } from "../handler/userAuthent.js";
 
 const router = express.Router();
 
-router.route("/registeruser").post(registerUser);
+router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 router.route("/logout").get(logout);
 router.route("/password/forgot").post(resetPassword);

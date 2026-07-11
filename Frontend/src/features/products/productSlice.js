@@ -3,16 +3,25 @@ import axios from "axios";
 
 export const getProduct = createAsyncThunk(
   "product/getProduct",
-  async ({ keyword, page=1 }, { rejectWithValue }) => {
+  async ({ keyword, page = 1, category }, { rejectWithValue }) => {
     try {
       // merged with backend port in implement inside the vite folder port 6700 backend port
 
       //destructre the res data from the link http://localhost:6700/api/v1/products
-      const link = keyword
-        ? `/api/v1/products?keyword=${encodeURIComponent(keyword)}&page=${page}`
-        : `/api/v1/products?page=${page}`;
+      // const link = keyword
+      //   ? `/api/v1/products?keyword=${encodeURIComponent(keyword)}&page=${page}`
+      //   : `/api/v1/products?page=${page}`;
+      let link = `/api/v1/products?page=${page}`;
+
+      if (category) {
+        link += `&category=${encodeURIComponent(category)}`;
+      }
+
+      if (keyword) {
+        link += `&keyword=${encodeURIComponent(keyword)}`;
+      }
       const { data } = await axios.get(link);
-      console.log(data);
+
       return data; //return to reducer
     } catch (err) {
       return rejectWithValue(err.response?.data || "something went wrong");
@@ -46,8 +55,8 @@ const productSlice = createSlice({
     loading: false,
     error: null,
     product: null,
-    productPerPage:4,
-    totalPages:0
+    productPerPage: 4,
+    totalPages: 0,
   },
   reducers: {
     removeErrors: (state) => {
@@ -67,8 +76,7 @@ const productSlice = createSlice({
         state.products = action.payload.products;
         state.productCount = action.payload.productCount;
         state.productPerPage = action.payload.productPerPage;
-        state.totalPages= action.payload.totalPags;
-
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(getProduct.rejected, (state, action) => {
         state.loading = false;
