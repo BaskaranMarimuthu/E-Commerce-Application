@@ -90,14 +90,14 @@ const Login = () => {
           <div>
             <button
               type="submit"
-              className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl"
+              className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl active:scale-[0.98]"
             >
               Register
             </button>
             <p className="text-sm text-gray-600 text-center mt-4">
               Don't have an account?{" "}
               <Link
-                to="/login"
+                to="/register"
                 className="text-amber-600 font-medium hover:underline"
               >
                 sign up here

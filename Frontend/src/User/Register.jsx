@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import Title from "../components/Title";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { register, removeErrors, removeSuccess } from "../features/user/userSlice";
-import { useSelector,useDispatch } from "react-redux";
-
+import {
+  register,
+  removeErrors,
+  removeSuccess,
+} from "../features/user/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const Register = () => {
   const [previewImage, setPreviewImage] = useState("");
@@ -18,9 +21,7 @@ const Register = () => {
   });
   const { name, email, password } = user;
   const [avatar, setAvatar] = useState("");
-const { loading, error, success } = useSelector(
-  (state) => state.user
-);
+  const { loading, error, success } = useSelector((state) => state.user);
   const handleChange = (e) => {
     if (e.target.name === "avatar") {
       const reader = new FileReader();
@@ -62,20 +63,23 @@ const { loading, error, success } = useSelector(
     // }
     dispatch(register(myForm));
   };
-  useEffect(()=>{
-    if(error){
-      toast.error(error, {position:"top-center", autoClose:3000});
+  useEffect(() => {
+    if (error) {
+      toast.error(error, { position: "top-center", autoClose: 3000 });
       dispatch(removeErrors());
     }
-  },[dispatch,error]);
+  }, [dispatch, error]);
 
-  useEffect(()=>{
-    if(success){
-      toast.success("Registration successfull",{position:"top-center", autoClose:3000});
+  useEffect(() => {
+    if (success) {
+      toast.success("Registration successfull", {
+        position: "top-center",
+        autoClose: 3000,
+      });
       dispatch(removeSuccess());
       navigate("/login");
     }
-  },[dispatch,success]);
+  }, [dispatch, success]);
 
   return (
     <div className="min-h-screen bg-amber-50 flex items-center justify-center px-4">
@@ -168,19 +172,19 @@ const { loading, error, success } = useSelector(
           </div>
 
           <div>
-           <button
-  type="submit"
-  className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl"
->
-  Register
-</button>
-            <p className="text-sm text-gray-600 text-center mt-4">
+            <button
+              type="submit"
+              className="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl"
+            >
+              Register
+            </button>
+            <p className="text-sm text-gray-600 text-center mt-4 active:scale-[0.98]">
               Already have an account?{" "}
               <Link
                 to="/login"
                 className="text-amber-600 font-medium hover:underline"
               >
-                 sign in
+                sign in
               </Link>
             </p>
           </div>

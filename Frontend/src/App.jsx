@@ -9,6 +9,10 @@ import ProductsPage from "./Pages/ProductsPage";
 import Login from "./User/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./features/user/userSlice";
+import Profile from "./User/Profile";
+import UpdateProfile from "./User/UpdateProfile";
+import ProtectedRoute from "./components/ProtectedRoute";
+import UpdatePassword from "./User/UpdatePassword";
 const App = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -27,8 +31,21 @@ const App = () => {
         <Route path="/Products" element={<ProductsPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
+        
         <Route path="/register" element={<Register />} />
         <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/profile"
+          element={<ProtectedRoute element={<Profile />} />}
+        />
+        <Route
+          path="/profile/update"
+          element={<ProtectedRoute element={<UpdateProfile />} />}
+        />
+        <Route
+          path="/password/update"
+          element={<ProtectedRoute element={<UpdatePassword />} />}
+        />
       </Routes>
     </BrowserRouter>
   );

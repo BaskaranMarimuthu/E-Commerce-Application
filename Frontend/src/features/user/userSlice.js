@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  asyncThunkCreator,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 
 import axios from "axios";
 // get register
@@ -53,11 +57,78 @@ export const login = createAsyncThunk(
         { email, password },
         config,
       );
-       console.log(data);
+      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Login failed. Please try again.",
+      );
+    }
+  },
+);
+//logout
+
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get("/api/v1/logout");
+      // console.log(data);
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "logged out failed");
+    }
+  },
+);
+
+//update user profile
+
+export const updateProfile = createAsyncThunk(
+  "user/updateprofile",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      const { data } = await axios.put(
+        "/api/v1/profile/update",
+        userData,
+        config,
+      );
+      return data;
+    } catch (error) {
+      // console.log(error.response);
+      // console.log(error.response?.data);
+
+      return rejectWithValue(error.response?.data || "Profile is not updated");
+    }
+  },
+);
+
+//change password
+
+export const changePassword = createAsyncThunk(
+  "user/updatePassword",
+  async (passwords, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.put(
+        "/api/v1/password/update",
+        passwords,
+        config,
+      );
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || "password not changed try again later",
       );
     }
   },
@@ -143,7 +214,6 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(loadUser.fulfilled, (state, action) => {
-
         state.loading = false;
         state.error = null;
         state.user = action.payload?.user || null;
@@ -166,6 +236,61 @@ const userSlice = createSlice({
           localStorage.removeItem("user");
           localStorage.removeItem("isAuthenticated");
         }
+      });
+    //logout
+    builder
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem("user");
+        localStorage.removeItem("isAuthenticated");
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload?.message || "Logged out failed please try again";
+      });
+    //update user profile
+
+    builder
+      .addCase(updateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.success = action.payload.success;
+        state.user = action.payload?.user || state.user;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload?.message || "update failed please try again";
+      });
+    /// change Password
+    builder
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.success = action.payload.success;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error =
+          action.payload?.message ||
+          "Failed to change password please try again";
       });
   },
 });

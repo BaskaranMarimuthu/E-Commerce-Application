@@ -171,23 +171,85 @@ export const updatePassword = async (req, res, next) => {
   }
   user.password = newPassword;
   await user.save();
-  tokenGernerate(login, 200, res);
+  tokenGernerate(user, 200, res);
 };
 
 //update profile
 
+// export const updateProfile = async (req, res, next) => {
+//   const { name, email, avatar } = req.body;
+//   const updateDetails = { name, email };
+
+//   if (avatar && avatar !== "") {
+//     const user = await User.findById(req.user.id);
+//     const imageId = user.avatar?.public_id;
+//     if (imageId) {
+//       await cloudinary.uploader.destroy(imageId);
+//     }
+//     const myCloud = await cloudinary.uploader.upload(avatar, {
+//       folder: "avatar",
+//       width: 150,
+//       crop: "scale",
+//     });
+//     updateDetails.avatar = {
+//       public_id: myCloud.public_id,
+//       url: myCloud.secure_url,
+//     };
+//   }
+//   const user = await User.findByIdAndUpdate(req.user.id, updateDetails, {
+//     new: true,
+//     runValidators: true,
+//   });
+//   res.status(200).json({
+//     success: true,
+//     message: "profile updated successfully",
+//     user,
+//   });
+//
+// };
 export const updateProfile = async (req, res, next) => {
-  const { name, email } = req.body;
-  const updateDetails = { name, email };
-  const user = await User.findByIdAndUpdate(req.user.id, updateDetails, {
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({
-    success: true,
-    message: "profile updated successfully",
-    user,
-  });
+  try {
+    console.log("========== UPDATE PROFILE ==========");
+    console.log("Body:", req.body);
+    console.log("User:", req.user);
+
+    const { name, email, avatar } = req.body;
+
+    const updateDetails = { name, email };
+
+    if (avatar && avatar.startsWith("data:image")) {
+      const user = await User.findById(req.user.id);
+
+      if (user.avatar?.public_id) {
+        await cloudinary.uploader.destroy(user.avatar.public_id);
+      }
+
+      const myCloud = await cloudinary.uploader.upload(avatar, {
+        folder: "avatar",
+        width: 150,
+        crop: "scale",
+      });
+
+      updateDetails.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+    }
+
+    const user = await User.findByIdAndUpdate(req.user.id, updateDetails, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (err) {
+    console.log("UPDATE PROFILE ERROR:");
+    console.log(err);
+    next(err);
+  }
 };
 
 //getuser

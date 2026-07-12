@@ -1,5 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import {
+  ArrowUpLeftFromSquare,
+  ExternalLinkIcon,
+  LogOut,
   MenuIcon,
   Search,
   SearchIcon,
@@ -16,14 +19,17 @@ import {
   XIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../features/user/userSlice";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const [profileDropDown, setProfileDropDown] = useState(false);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   console.log(isAuthenticated);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const hanldeSearch = (e) => {
     e.preventDefault();
@@ -33,6 +39,10 @@ const Navbar = () => {
       navigate("/products");
     }
     setSearchQuery("");
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -107,15 +117,80 @@ const Navbar = () => {
 
           {/* register */}
 
-          {!isAuthenticated && (
-            <Link
-              to="/register"
-              className="hidden sm:flex items-center text-black gap-2 bg-amber-50 hover:bg-blue-300 px-3 ml-3   rounded"
-            >
-              <User2Icon size={18} />
-              <span>Login user</span>
-            </Link>
+          {!isAuthenticated ? (
+            <div className="hidden sm:flex items-center gap-2">
+              <Link
+                to="/login"
+                className="text-black gap-2 bg-amber-50 hover:bg-blue-300 px-3 ml-3   rounded"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="hidden sm:flex items-center text-black gap-2 bg-amber-50 hover:bg-blue-300 px-3 ml-3   rounded"
+              >
+                <User2Icon size={18} />
+                <span>Register user</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="relative hidden sm:block">
+              <button
+                className="flex items-center"
+                onClick={() => setProfileDropDown(!profileDropDown)}
+              >
+                <img
+                  src={user?.avatar?.url}
+                  alt={user?.name}
+                  title={user?.name}
+                  className="w-10 h-10 rounded-full object-cover border-4 border-yellow-500 "
+                />
+              </button>
+              {profileDropDown && (
+                <div className="absolute left-0 m-2 bg-amber-50 p-2 border border-amber-50 shadow-lg z-50 rounded">
+                  <div>
+                    <p className="p-2  hover:bg-amber-100 ">{user?.name}</p>
+                    <p className="text-gray-700 p-2  hover:bg-amber-100">
+                      {user?.email}
+                    </p>
+                  </div>
+                  <div>
+                    <Link
+                      to="/orders"
+                      className="block p-2  hover:bg-amber-100"
+                    >
+                      My orders
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="block p-2  hover:bg-amber-100"
+                    >
+                      My Profile
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="block p-2  hover:bg-amber-100"
+                    >
+                      My Account
+                    </Link>
+
+                    <div className="block px-2 py-1  hover:bg-amber-100">
+                      <button
+                        className="block p-2 text-orange-600  hover:bg-amber-100"
+                        onClick={() => {
+                          handleLogout();
+                          setProfileDropDown(false);
+                        }}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
+
           {/* menu bar */}
           <button
             onClick={() => setOpen(!open)}
@@ -157,6 +232,59 @@ const Navbar = () => {
           >
             Contact Us
           </Link>
+          {/* mobile login and register */}
+          {!isAuthenticated ? (
+            <div className="flex flex-col gap-4">
+              <Link
+                onClick={() => setOpen(false)}
+                className="text-amber-100 hover:text-amber-400 transition font-semibold"
+                to="/login"
+              >
+                Login
+              </Link>
+              <Link
+                onClick={() => setOpen(false)}
+                className="text-amber-100 hover:text-amber-400 transition font-semibold"
+                to="/register"
+              >
+                Register
+              </Link>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-4 border-t border-gray-200 pt-4 mt-2">
+              <div className="flex items-center gap-3">
+                <img
+                  src={user?.avatar?.url}
+                  alt={user?.name}
+                  title={user?.name}
+                  className="w-10 h-10 rounded-full object-cover border-4 border-yellow-500 "
+                />
+                <div>
+                  <p className="text-amber-100 p-1">{user?.name}</p>
+                  <p className="text-amber-100 p-1">{user?.email}</p>
+                </div>
+              </div>
+              <div>
+                <Link to="/orders" className="block px-2">
+                  My orders
+                </Link>
+                <Link to="/profile" className="block px-2">
+                  My Profile
+                </Link>
+                <div className="block px-2">
+                  <button
+                    className="block p-2 text-orange-600"
+                    onClick={() => {
+                      handleLogout();
+                      setProfileDropDown(false);
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </nav>
