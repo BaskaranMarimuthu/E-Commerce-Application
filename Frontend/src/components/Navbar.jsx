@@ -28,6 +28,7 @@ const Navbar = () => {
   const [profileDropDown, setProfileDropDown] = useState(false);
   const { isAuthenticated, user } = useSelector((state) => state.user);
   console.log(isAuthenticated);
+  const {cartItems} = useSelector((state)=>state.cart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -60,7 +61,7 @@ const Navbar = () => {
 
         <div className="hidden text-lg md:flex items-center gap-6  text-yellow-100 font-medium">
           <Link
-            to="/home"
+            to="/"
             className=" hover:text-amber-400  transition duration-200"
           >
             Home
@@ -110,9 +111,9 @@ const Navbar = () => {
               size={26}
               className="  text-amber-50 hover:text-amber-500"
             />
-            <span className="absolute -top-2 -right-2 text-sm min-w-2 h-5 px-1 rounded bg-amber-100 text-black flex items-center justify-center">
-              6
-            </span>
+            {cartItems.length && <span className="absolute -top-2 -right-2 text-sm min-w-2 h-5 px-1 rounded bg-amber-100 text-black flex items-center justify-center">
+              {cartItems.length}
+            </span>}
           </Link>
 
           {/* register */}

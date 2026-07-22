@@ -17,7 +17,7 @@ const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProduct({keyword:""}));
+    dispatch(getProduct({ keyword: "" }));
   }, [dispatch]);
 
   useEffect(() => {

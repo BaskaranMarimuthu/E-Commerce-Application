@@ -2,12 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Title from "../components/Title";
-import {
-  ShoppingBag,
-  ShieldCheck,
-  Truck,
-  Headphones,
-} from "lucide-react";
+import { ShoppingBag, ShieldCheck, Truck, Headphones } from "lucide-react";
 
 const About = () => {
   return (
@@ -17,7 +12,6 @@ const About = () => {
 
       <section className="bg-gradient-to-b from-amber-50 via-white to-amber-100 min-h-screen">
         <div className="max-w-6xl mx-auto px-6 py-16">
-
           <div className="text-center mb-14">
             <h1 className="text-5xl font-bold text-mauve-800">
               About NammaKart
@@ -32,7 +26,6 @@ const About = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
-
             <img
               src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d"
               alt="Shopping"
@@ -58,61 +51,38 @@ const About = () => {
           </div>
 
           <div className="grid md:grid-cols-4 gap-8 mt-20">
-
             <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-              <ShoppingBag
-                className="mx-auto text-amber-500"
-                size={42}
-              />
-              <h3 className="mt-4 font-bold text-xl">
-                Premium Products
-              </h3>
+              <ShoppingBag className="mx-auto text-amber-500" size={42} />
+              <h3 className="mt-4 font-bold text-xl">Premium Products</h3>
               <p className="text-gray-500 mt-3">
                 Carefully selected quality products across multiple categories.
               </p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-              <ShieldCheck
-                className="mx-auto text-green-600"
-                size={42}
-              />
-              <h3 className="mt-4 font-bold text-xl">
-                Secure Payments
-              </h3>
+              <ShieldCheck className="mx-auto text-green-600" size={42} />
+              <h3 className="mt-4 font-bold text-xl">Secure Payments</h3>
               <p className="text-gray-500 mt-3">
                 Safe and trusted payment methods with complete protection.
               </p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-              <Truck
-                className="mx-auto text-blue-600"
-                size={42}
-              />
-              <h3 className="mt-4 font-bold text-xl">
-                Fast Delivery
-              </h3>
+              <Truck className="mx-auto text-blue-600" size={42} />
+              <h3 className="mt-4 font-bold text-xl">Fast Delivery</h3>
               <p className="text-gray-500 mt-3">
                 Quick shipping with reliable delivery partners.
               </p>
             </div>
 
             <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-              <Headphones
-                className="mx-auto text-red-500"
-                size={42}
-              />
-              <h3 className="mt-4 font-bold text-xl">
-                24/7 Support
-              </h3>
+              <Headphones className="mx-auto text-red-500" size={42} />
+              <h3 className="mt-4 font-bold text-xl">24/7 Support</h3>
               <p className="text-gray-500 mt-3">
                 Friendly customer support whenever you need assistance.
               </p>
             </div>
-
           </div>
-
         </div>
       </section>
 

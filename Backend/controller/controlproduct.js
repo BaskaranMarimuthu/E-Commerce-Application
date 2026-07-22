@@ -24,7 +24,7 @@ export const getAllProducts = async (req, res, next) => {
   const filteredQuery = objApi.query.clone(); // query clone of search and filter
   const productCount = await filteredQuery.countDocuments(); // number of matching documents
 
-  const productPerPage = 6;
+  const productPerPage = 12;
   let page = Number(req.query.page) || 1; // request query page, default to 1
   if (page < 1) page = 1;
 
@@ -50,17 +50,16 @@ export const getAllProducts = async (req, res, next) => {
 
 //get single product by id
 export const getOneProduct = async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
 
-    const product = await Product.findById(req.params.id);
+  if (!product) {
+    return next(new HandleError("Product not found", 404));
+  }
 
-    if (!product) {
-        return next(new HandleError("Product not found", 404));
-    }
-
-    res.status(200).json({
-        success: true,
-        product
-    });
+  res.status(200).json({
+    success: true,
+    product,
+  });
 };
 
 //update product
@@ -112,7 +111,7 @@ export const createReviewProduct = async (req, res, next) => {
   const userIdStr = req.user._id.toString();
 
   const existingReview = product.reviews.find(
-    (r) => r.user && r.user.toString() === userIdStr
+    (r) => r.user && r.user.toString() === userIdStr,
   );
 
   if (!existingReview) {
@@ -131,7 +130,8 @@ export const createReviewProduct = async (req, res, next) => {
   product.numReviews = product.reviews.length;
 
   const sum = product.reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
-  product.ratings = product.reviews.length > 0 ? sum / product.reviews.length : 0;
+  product.ratings =
+    product.reviews.length > 0 ? sum / product.reviews.length : 0;
 
   await product.save({ validateBeforeSave: false });
 
@@ -140,20 +140,19 @@ export const createReviewProduct = async (req, res, next) => {
 
 // veiw product reviews
 
-export const viewProductReviews = async(req, res, next)=>{
+export const viewProductReviews = async (req, res, next) => {
   const product = await Product.findById(req.query.id);
-  if(!product){
-    return next(new handleError('product not found',404));
+  if (!product) {
+    return next(new handleError("product not found", 404));
   }
   res.status(200).json({
-    success:true,
-    reviews:product.reviews,
+    success: true,
+    reviews: product.reviews,
   });
-} 
+};
 
 //view all products for admin
 export const adminAllProducts = async (req, res) => {
-  
   const products = await Product.find();
   res.status(200).json({
     success: true,
@@ -163,27 +162,32 @@ export const adminAllProducts = async (req, res) => {
 
 // delete reviews
 
-export const deleteReviews = async(req, res, next)=>{
+export const deleteReviews = async (req, res, next) => {
+  const { productId, reviewId } = req.query;
 
- const {productId,reviewId}=req.query;
-
-  const  product = await Product.findById(productId);
-  if(!product){
-    return next(new handleError('product not found',404));
+  const product = await Product.findById(productId);
+  if (!product) {
+    return next(new handleError("product not found", 404));
   }
-  const reviews = product.reviews.filter((review)=> review._id.toString()!== reviewId.toString());
-                                
-  let sum=0;
-  reviews.forEach((review)=>{
-   sum +=review.rating;
+  const reviews = product.reviews.filter(
+    (review) => review._id.toString() !== reviewId.toString(),
+  );
+
+  let sum = 0;
+  reviews.forEach((review) => {
+    sum += review.rating;
   });
-  const ratings = reviews.length > 0 ? sum / reviews.length : 0 ;
+  const ratings = reviews.length > 0 ? sum / reviews.length : 0;
   const numReviews = reviews.length;
 
-  await Product.findByIdAndUpdate(productId, {reviews ,ratings, numReviews}, {new:true});
+  await Product.findByIdAndUpdate(
+    productId,
+    { reviews, ratings, numReviews },
+    { new: true },
+  );
 
   res.status(200).json({
-    success:true,
-    message:"review deleted successfully"
-  })
-}
+    success: true,
+    message: "review deleted successfully",
+  });
+};

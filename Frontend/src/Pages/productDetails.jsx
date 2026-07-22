@@ -23,11 +23,24 @@ import {
   removeErrors,
 } from "../features/products/productSlice";
 import toast from "react-hot-toast";
+import { addCartItems, removeMessage } from "../features/cart/cartSlice.js";
 
 const Product = () => {
   const [userRating, setUserRating] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const { product, loading, error } = useSelector((state) => state.product);
-  console.log("Product from Redux:", product);
+  // console.log("Product from Redux:", product);
+  const {
+    loading: cartLoading,
+    error: cartError,
+    cartItems,
+    success,
+    message,
+  } = useSelector((state) => state.cart);
+  // console.log({
+  //   success,
+  //   message,
+  // });
   const { id } = useParams();
   //console.log(id);
   const dispatch = useDispatch();
@@ -40,10 +53,44 @@ const Product = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message);
+      toast.error(error.message, { position: "top-center", autoClose: 3000 });
       dispatch(removeErrors());
     }
   }, [dispatch, error]);
+
+  useEffect(() => {
+    if (success && message) {
+      toast.success(message, { position: "top-center", autoClose: 3000 });
+      dispatch(removeMessage());
+    }
+  }, [message, success, dispatch]);
+
+  const increaseQuantity = () => {
+    if (product.stock <= quantity) {
+      toast.error("Cannot exceed available stock", {
+        position: "top-center",
+        autoClose: 300,
+      });
+      dispatch(removeErrors());
+      return;
+    }
+    setQuantity(quantity + 1);
+  };
+  const decreaseQuantity = () => {
+    if (quantity <= 1) {
+      toast.error("quantity cannot be lessthan 1", {
+        position: "top-center",
+        autoClose: 300,
+      });
+      dispatch(removeErrors());
+      return;
+    }
+    setQuantity(quantity - 1);
+  };
+
+  const addToCartHandler = () => {
+    dispatch(addCartItems({ id, quantity }));
+  };
 
   if (loading || !product) {
     return (
@@ -122,15 +169,17 @@ const Product = () => {
                     {/* Quantity selector */}
                     <div className="flex items-center rounded-lg border border-gray-300">
                       <button
+                        onClick={decreaseQuantity}
                         className="p-2.5 text-gray-500 hover:text-gray-800 disabled:opacity-40"
                         aria-label="Decrease quantity"
                       >
                         <Minus size={16} />
                       </button>
                       <span className="w-8 text-center text-sm font-semibold text-gray-900">
-                        1
+                        {quantity}
                       </span>
                       <button
+                        onClick={increaseQuantity}
                         className="p-2.5 text-gray-500 hover:text-gray-800"
                         aria-label="Increase quantity"
                       >
@@ -139,7 +188,11 @@ const Product = () => {
                     </div>
 
                     {/* Add to cart */}
-                    <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 active:scale-[0.98]">
+                    <button
+                      disabled={cartLoading}
+                      onClick={addToCartHandler}
+                      className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-orange-500 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 active:scale-[0.98]"
+                    >
                       <ShoppingCart size={18} />
                       Add to Cart
                     </button>

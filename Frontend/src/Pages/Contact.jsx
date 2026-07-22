@@ -2,12 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Title from "../components/Title";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-} from "lucide-react";
+import { Mail, Phone, MapPin, Clock } from "lucide-react";
 
 const Contact = () => {
   return (
@@ -16,13 +11,9 @@ const Contact = () => {
       <Navbar />
 
       <section className="bg-gradient-to-b from-amber-50 via-white to-amber-100 min-h-screen">
-
         <div className="max-w-6xl mx-auto px-6 py-16">
-
           <div className="text-center mb-14">
-            <h1 className="text-5xl font-bold text-mauve-800">
-              Contact Us
-            </h1>
+            <h1 className="text-5xl font-bold text-mauve-800">Contact Us</h1>
 
             <p className="mt-5 text-gray-600 text-lg">
               We'd love to hear from you. Feel free to contact us anytime.
@@ -30,15 +21,12 @@ const Contact = () => {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-10">
-
             <div className="bg-white rounded-2xl shadow-lg p-8">
-
               <h2 className="text-3xl font-bold mb-8 text-mauve-800">
                 Send us a Message
               </h2>
 
               <form className="space-y-5">
-
                 <input
                   type="text"
                   placeholder="Your Name"
@@ -63,18 +51,13 @@ const Contact = () => {
                   className="w-full border rounded-lg px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
                 ></textarea>
 
-                <button
-                  className="bg-mauve-800 text-amber-100 px-8 py-3 rounded-lg hover:bg-mauve-700 transition"
-                >
+                <button className="bg-mauve-800 text-amber-100 px-8 py-3 rounded-lg hover:bg-mauve-700 transition">
                   Send Message
                 </button>
-
               </form>
-
             </div>
 
             <div className="space-y-6">
-
               <div className="bg-white rounded-xl shadow-lg p-6 flex gap-5 items-center">
                 <Phone className="text-amber-500" />
                 <div>
@@ -98,8 +81,7 @@ const Contact = () => {
                   <p>
                     Chennai,
                     <br />
-                    Tamil Nadu,
-                    India
+                    Tamil Nadu, India
                   </p>
                 </div>
               </div>
@@ -112,13 +94,9 @@ const Contact = () => {
                   <p>9:00 AM - 8:00 PM</p>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       <Footer />

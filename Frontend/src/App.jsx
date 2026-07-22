@@ -13,6 +13,7 @@ import Profile from "./User/Profile";
 import UpdateProfile from "./User/UpdateProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UpdatePassword from "./User/UpdatePassword";
+import Cart from "./Cart/Cart";
 const App = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -31,9 +32,11 @@ const App = () => {
         <Route path="/Products" element={<ProductsPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
-        
+        <Route path="/cart" element={<Cart />} />
+
         <Route path="/register" element={<Register />} />
         <Route path="/contact" element={<Contact />} />
+
         <Route
           path="/profile"
           element={<ProtectedRoute element={<Profile />} />}
